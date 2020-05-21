@@ -8,7 +8,7 @@ import schedule
 from time import sleep
 from picamera import PiCamera
 from picam_preset_1 import *  #will import: pool, take_picture, camera_settings, start_day, stop_day, start_time, stop_time, interval
-processing_time = (1 + camera.shutter_speed / 1000000)          #Time of executing the script, camera.shutter_speed is in micro secconds
+processing_time = (1 + camera.shutter_speed / 1000000)    #Time of executing the script, camera.shutter_speed is in micro secconds
 
 #IMPORTANT camera script name: picam_preset_"X".py 
 #1 -  2 min ISO 800, for automatic upload
@@ -24,7 +24,7 @@ def tl_script():
     return tl_0
 	
 done = True
-def terminated():
+def terminated(): 
     global done
     print("Done for today")
     done = False
@@ -57,8 +57,8 @@ def check_time():																		#Return True or False for the working time
     global x
     x = datetime.datetime.utcnow()                                                     	#day of the week 0-6
     local_timezone = tzlocal.get_localzone()                                            #Time Zone 
-    moment_utc = x.replace(tzinfo=pytz.utc).astimezone(local_timezone)					#UTC Time Zone
-    moment =(moment_utc.strftime("%X"))										           	#time now in hh:mm:ss
+    moment_utc = x.replace(tzinfo=pytz.utc).astimezone(local_timezone)			#UTC Time Zone
+    moment =(moment_utc.strftime("%X"))							#time now in hh:mm:ss
     global tine_now_str
     tine_now_str = (sum(x * int(t) for x, t in zip([3600, 60, 1], moment.split(":"))))  #print(tine_now_str)
     if tine_now_str >= start_str and tine_now_str <= stop_str:
@@ -68,9 +68,10 @@ def check_time():																		#Return True or False for the working time
         time_variable = False
 
 if not os.path.exists("Pool"):															#Create capture folder name if don't exist
-    os.makedirs("Pool")   
+    os.makedirs("Pool")
 
-while True:                                                                             #Main loop
+#Main loop
+while True:
     check_day()
     check_time()
     if day_variable == True and time_variable == True:
@@ -82,10 +83,12 @@ while True:                                                                     
         check_time()
     elif day_variable == True and time_variable == False:
         if done == True:
-            terminated()	
+            terminated()						#workiong on	
 		#print("Working day but time is over, come tomorrow")
         sleep(1)        
     elif day_variable == False and time_variable == False:
-		done()
+		done()							#workiong on
 		print("Take a beer it's a free day!")
-		sleep(3600)
+		sleep(3600)						#workiong on
+		
+		
