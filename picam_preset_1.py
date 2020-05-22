@@ -67,7 +67,6 @@ save_to_gdrive = True 						#True / False save on gdrive after stop_time
 camera = PiCamera()
 #filename = ("IMG_" + time.strftime("%y%m-%d_%H%M-%S") +".jpg")	#filename formating "IMG_2005-23_1203-00.jpg"	#working on
 #image_name = pool + filename											#working on
-camera.shutter_speed = (shutter * 1000)			#in MICROseconds!!!! 1s = 1 000 ms = 1 000 000 microseconds
 
 def camera_settings():					#Camera_settings
 	#camera = PiCamera()
@@ -76,6 +75,7 @@ def camera_settings():					#Camera_settings
 	camera.contrast = -10 				#(-100 to 100)
 	camera.saturation = -5 				#(-100 to 100)
 	camera.iso = 800 				#(100 to 800)
+	camera.shutter_speed = (shutter * 1000)		#in MICROseconds!!!! 1s = 1 000 ms = 1 000 000 microseconds
 	camera.exposure_compensation = 0 		#(-25 to 25)
 	camera.exposure_mode = 'auto' 			#(off,auto,night,nightpreview,backlight,spotlight,sports,snow,beach,verylong,fixedfps,antishake,fireworks)
 	camera.meter_mode = 'average' 			#(average,spot,backlit,matrix)
