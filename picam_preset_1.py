@@ -1,6 +1,6 @@
 #camera preset 1
-#shutter speeds
 from picamera import PiCamera
+#standard shutter speeds in ms
 s8000 = 0.1221		#ms	1/8000
 s6400 = 0.1538		#ms	1/6400
 s5000 = 0.1938		#ms	1/5000
@@ -31,19 +31,19 @@ s020 = 49.61		#ms	1/20
 s015 = 62.50		#ms	1/15
 s013 = 78.75		#ms	1/13
 s010 = 99.21		#ms	1/10
-s08 = 125.0			#ms	1/8
-s06 = 157.5			#ms	1/6
-s05 = 198.4			#ms	1/5
-s04 = 250.0			#ms	1/4
-s03 = 315.0			#ms	1/3
+s08 = 125.0		#ms	1/8
+s06 = 157.5		#ms	1/6
+s05 = 198.4		#ms	1/5
+s04 = 250.0		#ms	1/4
+s03 = 315.0		#ms	1/3
 s025 = 396.9		#ms	1/2.5
-s02 = 500.0			#ms	1/2
-s6 = 630.0			#ms	1/1.6
-s3 = 793.7			#ms	1/1.3
-s1 = 1000.0			#ms	1
+s02 = 500.0		#ms	1/2
+s6 = 630.0		#ms	1/1.6
+s3 = 793.7		#ms	1/1.3
+s1 = 1000.0		#ms	1
 
-s_13 = 1260.0	#ms	1.3
-s_16 = 1587.0	#ms	1.6
+s_13 = 1260.0		#ms	1.3
+s_16 = 1587.0		#ms	1.6
 s_20 = 2000		#ms	2
 s_25 = 2052		#ms	2.5
 s_30 = 3175		#ms	3
@@ -51,48 +51,47 @@ s_40 = 4000		#ms	4
 s_50 = 5004		#ms	5
 s_60 = 6000		#ms	6
 
-#############################################################################################
-start_day = "1" 							#Starting day 0-Sunday, 6- Saturday
-stop_day = "5"								#Stoping  day 0-Sunday, 6- Saturday
-start_time = "11:40"						#Staerting time
-stop_time = "18:40"							#Stoping time
-interval = "2:30"							#interval
-shutter = 0									#0 = auto, s_60
-sync_to_gdrive = True 						#True / False emediatly save on gdrive
+#####################   Settings   -    Preset 1   ####################################################
+start_day = "1" 						#Starting day 0-Sunday, 6- Saturday
+stop_day = "5"							#Stoping  day 0-Sunday, 6- Saturday
+start_time = "11:40"						#Starting time in local DST
+stop_time = "18:40"						#Stoping time in local DST
+interval = "2:30"						#interval
+shutter = 0							#shooter speed in ms 0 = auto, s_60
+sync_to_gdrive = False 						#True / False emediatly save on gdrive,
 save_to_gdrive = True 						#True / False save on gdrive after stop_time
-#############################################################################################
-camera = PiCamera()
-filename = ("IMG_" + time.strftime("%y-%m-%d_%H%M%S") +".jpg")		#filename formating "IMG_20-05-23_120300.jpg"
-pool = "/home/pi/Scenic/Pool/"				#Capture folder name, differnt settings better different folders
-image_name = pool + filename
-camera.shutter_speed = (shutter * 1000)	#in MICROseconds
+#for disabling the script just put both in the same value, save_to_gdrive == sync_to_gdrive
+#pool = "/home/pi/Scenic/Pool/"	 #working on			#Capture folder name, differnt settings better different folders
+########################################################################################################
 
-def camera_settings():						#Camera_settings
+camera = PiCamera()
+#filename = ("IMG_" + time.strftime("%y%m-%d_%H%M-%S") +".jpg")	#filename formating "IMG_2005-23_1203-00.jpg"	#working on
+#image_name = pool + filename											#working on
+camera.shutter_speed = (shutter * 1000)			#in MICROseconds!!!! 1s = 1 000 ms = 1 000 000 microseconds
+
+def camera_settings():					#Camera_settings
 	#camera = PiCamera()
-	camera.brightness = 50 					#(0 to 100)
-	camera.sharpness = 0 					#(-100 to 100)
-	camera.contrast = -10 					#(-100 to 100)
-	camera.saturation = -5 					#(-100 to 100)
-	camera.iso = 800 						#(100 to 800)
+	camera.brightness = 50 				#(0 to 100)
+	camera.sharpness = 0 				#(-100 to 100)
+	camera.contrast = -10 				#(-100 to 100)
+	camera.saturation = -5 				#(-100 to 100)
+	camera.iso = 800 				#(100 to 800)
 	camera.exposure_compensation = 0 		#(-25 to 25)
 	camera.exposure_mode = 'auto' 			#(off,auto,night,nightpreview,backlight,spotlight,sports,snow,beach,verylong,fixedfps,antishake,fireworks)
 	camera.meter_mode = 'average' 			#(average,spot,backlit,matrix)
-	camera.awb_mode = 'auto' 				#(off,auto,sun,cloud,shade,tungsten,fluorescent,incandescent,flash,horizon)
-	camera.rotation = 0						#rotation 0-270
-	camera.hflip = False					#Horisontal flip
-	camera.vflip = False					#Vertical filelip
-	#camera.capture_raw = True / False
-	camera.crop = (0.2,0.2,1,1) 			#(0.0 to 1.0)
-	camera.resolution = (4056, 3040)		#Resolution
-
+	camera.awb_mode = 'auto' 			#(off,auto,sun,cloud,shade,tungsten,fluorescent,incandescent,flash,horizon)
+	camera.rotation = 0				#rotation 0-270
+	camera.hflip = False				#Horisontal flip
+	camera.vflip = False				#Vertical filelip
+	camera.resolution = (4056, 3040)		#Resolution, Max 4056x3040
+	camera.preview_fullscreen = False		#Leave False
+	camera.preview_window = (20, 20, 1024, 768)	#preview window
+	camera.crop = (0.0, 0.0, 1.0, 1.0)		#Full screen
+	#camera.crop = (0.3,0.3,0.3,0.3)		#uncomment for focus adjusment view
+	#camera.framerate = Decimal('60') 	#don't know
+	#camera.capture_raw = True / False	#working on
 	
-	
-
-
 def take_picture():
-	camera_settings()
-	camera.capture(image_name)		
-	sleep(1)
-	
-	
-#shutter = (s_1 * 1000)				set shutter_speed 1, 1/2, 1/4, 1/8, 1/10, 1/15, 1/30 1/60, 1/80, 1/100, 1/125, 1/160 1/200, 1/250, 1/320, 1/500,
+    camera_settings()
+    camera.capture('Pool/IMG_' + time.strftime('%y%m-%d_%H%M-%S') +'.jpg') #working on naming preset
+    sleep(1) #maybe is not neccesary  
