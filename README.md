@@ -1,5 +1,7 @@
 # Pi-LTTL
-Long term time lapse for Raspberry Pi with HQ camera
+Long term time lapse for Raspberry Pi with HQ camera 1.0
+
+*under construction, Scheduler_x.py can be executed manually 
 
 There will be a master scipt to start all in the same time StartTimelapse_1.py
 
