@@ -10,7 +10,9 @@ import socket
 import subprocess
 from time import sleep
 
-from MAIN STARTING SCRIPT import Preset #working 
+#TO BE DONE import from the main file "Start_timelapse.py" a variable that define witch variables will be imported
+#from specified preset 
+from MAIN Start_timelapse import Preset  #Preset = Picam-preset_1
 from Preset import start_day, stop_day, sync_to_cloud, save_to_cloud, stop_time, start_time
 #from picam_reset_1 import start_day, stop_day, sync_to_cloud, save_to_cloud, stop_time, start_time 
 
@@ -33,14 +35,14 @@ moment =(moment_utc.strftime("%X"))								#time now in hh:mm:ss
 start_str = (sum(x * int(t) for x, t in zip([3600, 60, 1], start_time.split(":"))))		#string time start now in seconds
 stop_str = (sum(x * int(t) for x, t in zip([3600, 60, 1], stop_time.split(":"))))		#string time stop now in seconds
 tine_now_str = (sum(x * int(t) for x, t in zip([3600, 60, 1], moment.split(":"))))		#string time now in seconds
-day_now= x.strftime("%w")																#day of the week 0-6
+day_now= x.strftime("%w") ##TO BE DONE add time zone, we don't want a couple of hours to change the day before or after the local time 								#day of the week 0-6
 
 Schedule_day = False
 Raspberry_online = True
 cloud_online = False
 error_upload = True
 
-#################will be defined in picam_reset_1
+################# will be defined in picam_reset_1  ######################
 def sync():
 	os.system("rclone --ignore-existing sync 'Pool' gdrive -P -vv")
 	sleep(300)
@@ -54,19 +56,20 @@ def restart_cloud():############################# subprocces and check for other
 	os.system("rclone mount rpi-gdrive: gdrive")
 	sleep(2)	
 #########################################################################
-	
+#check if Raspberry is on internet
 def raspberry_online():
 	try:
 		socket.create_connection(('Google.com', 80))
-		global Raspberry_online ###############################
+		global Raspberry_online ############################### need to check this function
 		Raspberry_online = True
 		return Raspberry_online
 	except OSError:
 		Raspberry_online = False
 		return Raspberry_online
-
+	
+#check if cloud is on mounted in a folder
 def cloud_check():
-	if os.path.isdir("gdrive/Test") == True: #call variable directory from preset
+	if os.path.isdir("gdrive/Test") == True: #TO DO: call variable directory from preset, in the preset will be defined the dir
 		cloud_online = True
 		return cloud_online
 	else: #if error
@@ -74,25 +77,54 @@ def cloud_check():
 		return gdrive_online
 		print("Not mounted")
 		
-def	upload_check():
+#TO BE DONE rclone does have upload --checksum --dry-run, only don't know yet how to return a value  ##################
+def upload_check():
 	if os.system(): #find a way to check the differences
 		error_upload = True 
 		return error_upload
 	else:
 		error_upload = False
 		return error_upload
-		
+	
+#returns today in timestamp format 
+def today():
+	return day_now
+
+#return true or false if is a working day 
 def day_check():
-	for list_day in list(range(start_day, stop_day + 1)):
-		if list_day == day_now:
-			global Schedule_day
-			Schedule_day = True
-			return Schedule_day
-		else:
-			global Schedule_day
-			Schedule_day = False
-			return Schedule_day
-		
+	today()
+	if start_day <= stop_day:
+		for list_day in list(range(start_day, stop_day + 1)):
+			if list_day == day_now:
+				global Schedule_day
+				Schedule_day = True
+				return Schedule_day
+			else:
+				global Schedule_day
+				Schedule_day = False
+				return Schedule_day
+	else start_day > stop_day:
+		x1 = list(range(start_day, 7))
+            	x2 = list(range(0, stop_day + 1))
+            	day_now =x1 + x2
+		for list_day in list(range(start_day, stop_day - 1)):
+			if list_day == day_now:
+				global Schedule_day
+				Schedule_day = True
+				return Schedule_day
+			else:
+				global Schedule_day
+				Schedule_day = False
+				return Schedule_day
+			
+#ther is a problem, if a time lapse ends in 23:50 and the next day is a non working day 
+#the upload will have only 10 minutes to run and it will not be completed. The upload will 
+#coninue next working day again after 23:50, but will have two days files.
+#to overcome this probelm 
+#if time_now < 23:00 
+#   ignore or add a woring day for night upload
+#this is for fail safe reason
+
 #############################  - Main loop  -  ##########################
 new_day = True
 upload_complete = False
@@ -144,7 +176,7 @@ while new_day == True:
 				if cloud_online == True and new_day == False and Raspberry_online == True:
 					upload_check()
 					if time_upload > stop_time or time_upload < start_time and error_upload == True and Raspberry_online == True:
-						upload() #moguće da ostane bez interneta dok traje
+						upload() #it's possible go offline 
 						upload_check()
 						raspberry_online()
 						if error_upload == True and cloud_online == True and Raspberry_online == True and new_day == False:
@@ -168,5 +200,7 @@ while new_day == True:
 	else:
 		raspberry_online() # raspberry nije online
 		sleep(300)
-else:
-	chack_day()
+else: ##elif Schedule_day = False and stop_time >= 23:00 
+		#uploaad 
+		#check ando stop
+	day_check()
