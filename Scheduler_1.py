@@ -18,8 +18,8 @@ processing_time = (1 + camera.shutter_speed / 1000000)    #Time of executing the
 tl_0 = True
 def tl_script():
     global tl_0
-    print("schedule")
-    #take_picture()
+    print("schedule take picture - dry run")
+    #take_picture() #uncomment 
     tl_0 = False
     return tl_0
 	
