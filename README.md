@@ -4,13 +4,14 @@ Long term time lapse for Raspberry Pi with HQ camera
 There will be a master scipt to start all in the same time StartTimelapse_1.py
 
 The structure:
+
 StartTimelapse_1.py.................. edit for chosing a preset
   - Scheduler_x.py..................... don't edit
   - Picame_preset-x.py............ edit preset options
   - Sim_upload_x.py...................don't edit, or only for manualy executing uncomment the presset, or set the desidered time
-  - gdrive..................................folder cloud storage
-  - pool....................................folder where script save the images
-  - backup...............................folder for backup, double check the cloud before deleting the files
+  - gdrive.......................................folder cloud storage
+  - pool..........................................folder where script save the images
+  - backup....................................folder for backup, double check the cloud before deleting the files
   
 _x are versions of the files  
 -x preset index
@@ -22,13 +23,21 @@ script StartTimelapse_1.
 Modules used:
 
 import pytz
+
 import tzlocal
+
 import datetime
+
 import time
+
 import os
+
 import sys
+
 import socket
+
 import subprocess 
+
 from picamera import PiCamera
 
 Before startind with uploading, rclone must be installed and configured. The curren version Sim_upload is made for gdrive use, 
