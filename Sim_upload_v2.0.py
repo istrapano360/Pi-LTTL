@@ -1,4 +1,5 @@
 #gdrive upload script under construction
+#replace word gdrive with cloud
 import pytz
 import tzlocal
 import datetime
@@ -9,10 +10,11 @@ import socket
 import subprocess
 from time import sleep
 
-from MAIN STARTING SCRIPT import Preset
+from MAIN STARTING SCRIPT import Preset #working 
 from Preset import start_day, stop_day, sync_to_gdrive, save_to_gdrive, stop_time, start_time
-#from picam_reset_1 import start_day, stop_day, sync_to_gdrive, save_to_gdrive, stop_time, start_time
+#from picam_reset_1 import start_day, stop_day, sync_to_gdrive, save_to_gdrive, stop_time, start_time 
 
+#########  -  uncomment for manually run  -  #################
 #start_day = 0#only import from preset
 #stop_day = 6 #only import from preset
 #sync_to_gdrive = True/False #only import from preset
@@ -38,11 +40,11 @@ Raspberry_online = True
 gdrive_online = False
 error_upload = True
 
-def sync():
+def sync(): #will be moved to preset file 
 	os.system("rclone --ignore-existing sync 'Pool' gdrive -P -vv")
 	sleep(300)
 	
-def upload():
+def upload():#will be moved to preset file 
 	os.system("rclone --checksum --ignore-existing sync 'Pool' gdrive -P -vv")
 	
 def raspberry_online():
@@ -65,7 +67,7 @@ def gdrive_check():
 		print("Not mounted")
 		
 def	upload_check():
-	if os.system(): #provjeri sa r clonom dali je sve ili dif files po nazivu i veličini ako nije sve uploudano
+	if os.system(): #find a way to check the differences
 		error_upload = True 
 		return error_upload
 	else:
@@ -83,7 +85,7 @@ def day_check():
 			Schedule_day = False
 			return Schedule_day
 		
-def restartgdrive():############################# subprocces and check for other procces and kill it
+def restartgdrive():  #will be moved to preset file,  subprocces and check for other procces and kill it
 	os.system("fusermount -u gdrive")
 	sleep(5)
 	os.system("rclone mount rpi-gdrive: gdrive")
