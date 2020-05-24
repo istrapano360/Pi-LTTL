@@ -50,6 +50,7 @@ s_30 = 3175		#ms	3
 s_40 = 4000		#ms	4
 s_50 = 5004		#ms	5
 s_60 = 6000		#ms	6
+#HQ camera can do max shutter speed 200 seconds, other cameras only 6 seconds
 
 #####################   Settings   -    Preset 1   ####################################################
 start_day = "1" 						#Starting day 0-Sunday, 6- Saturday
@@ -58,10 +59,10 @@ start_time = "11:40"						#Starting time in local DST
 stop_time = "18:40"						#Stoping time in local DST
 interval = "2:30"						#interval
 shutter = 0							#shooter speed in ms 0 = auto, s_60
-sync_to_gdrive = False 						#True / False emediatly save on gdrive,
-save_to_gdrive = True 						#True / False save on gdrive after stop_time
+sync_to_cloud = False 						#True / False emediatly save on gdrive,
+save_to_cloud = True 						#True / False save on gdrive after stop_time
 #for disabling the script just put both in the same value, save_to_gdrive == sync_to_gdrive
-#pool = "/home/pi/Scenic/Pool/"	 #working on			#Capture folder name, differnt settings better different folders
+#pool = "/home/pi/myfolder/Pool/"	 #working on		#Capture folder name, differnt settings better different folders
 ########################################################################################################
 
 camera = PiCamera()
