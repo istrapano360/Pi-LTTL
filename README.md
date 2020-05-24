@@ -12,8 +12,8 @@ StartTimelapse_1.py         edit for chosing a preset
   - pool                    folder where script save the images
   - backup                  folder for backup, double check the cloud before deleting the files
   
-  _x are versions of the files
-  -x preset index
+_x are versions of the files  
+-x preset index
   
 This script is made for using with the pi camsera, however the Scheduler-x.py is calling take_picture() function form Picame_preset_x.py
 witch can be also defined with with gphoto2 commands, only make a new Picame_preset_x.py file and don't forget to define in the min 
