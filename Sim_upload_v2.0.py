@@ -134,78 +134,77 @@ while new_day == True:
 		raspberry_online()
 		cloud_check()
 		new_day = False
-	return new_day
-	if Raspberry_online == True and new_day == False:
-		# Sinc on cloud option right after taking a picture
-		if sync_to_cloud == True and save_to_cloud == False and new_day == False and Raspberry_online == True:
-			if cloud_online == True and new_day == False and Raspberry_online == True:
-				if time_now <= stop_time and new_day == False and Raspberry_online == True:  #working time is not over 
-					sync() #no  --checksum, faster upload, if is done before stop time just wait 2 min and resart
-					sleep(60)
-					if time_now > stop_time and new_day == False and Raspberry_online == True: 	 #working time is over no new picture will be taken
-						cloud_check()
-						if cloud_online == True and new_day == False and Raspberry_online == True:
-							upload_check()	
-							if error_upload == True and new_day == False and Raspberry_online == True:
-								seelp(2)
-								print("Repeating upload!")
-								upload()
-								upload_check() #if is ok - set error_upload to False
-								raspberry_online()
-								cloud_check()
-							elif new_day == False and Raspberry_online == True:
-								seelp(2)
-								print("Upload exsecuted succesfuly, no need to repeat!")
-								new_day = True 
-								cloud_check()
-								raspberry_online()
+		if Raspberry_online == True and new_day == False:
+			# Sinc on cloud option right after taking a picture
+			if sync_to_cloud == True and save_to_cloud == False and new_day == False and Raspberry_online == True:
+				if cloud_online == True and new_day == False and Raspberry_online == True:
+					if time_now <= stop_time and new_day == False and Raspberry_online == True:  #working time is not over 
+						sync() #no  --checksum, faster upload, if is done before stop time just wait 2 min and resart
+						sleep(60)
+						if time_now > stop_time and new_day == False and Raspberry_online == True: 	 #working time is over no new picture will be taken
+							cloud_check()
+							if cloud_online == True and new_day == False and Raspberry_online == True:
+								upload_check()	
+								if error_upload == True and new_day == False and Raspberry_online == True:
+									seelp(2)
+									print("Repeating upload!")
+									upload()
+									upload_check() #if is ok - set error_upload to False
+									raspberry_online()
+									cloud_check()
+								elif new_day == False and Raspberry_online == True:
+									seelp(2)
+									print("Upload exsecuted succesfuly, no need to repeat!")
+									new_day == True 
+									cloud_check()
+									raspberry_online()
+								return new_day
+								pass	#form frst time her go back to main lool if   Schedule_day == True:
+							elif cloud_online == False and Raspberry_online == True:
+								restart_cloud()
+								sleep(5)
+							pass
+						pass
+					pass
+				elif cloud_online == False and Raspberry_online == True:
+					restart_cloud()
+					sleep(5)
+				pass
+			# Upload to cloud after working day is over and stops before time lapse starts
+			if sync_to_cloud == False and save_to_cloud == True and new_day == False and Raspberry_online == True:
+				if cloud_online == True and new_day == False and Raspberry_online == True:
+					upload_check()
+					if time_upload > stop_time or time_upload < start_time and error_upload == True and Raspberry_online == True:
+						upload() #it's possible disconnected 
+						upload_check()
+						raspberry_online()
+						if error_upload == True and cloud_online == True and Raspberry_online == True and new_day == False:
+							print("Uploading again!")
+							upload()
+							upload_check()
+						elif error_upload == False:
+							print("Succes upload, new upload schedule tomorrow!")
+							new_day == True 
 							return new_day
-							pass	#form frst time her go back to main lool if   Schedule_day == True:
-						elif cloud_online == False and Raspberry_online == True:
-							restart_cloud()
-							sleep(5)
+							sleep(120)
+						elif cloud_online == False:
+							restart_drive()
+							upload_check()
+							sleep(120)
 						pass
 					pass
 				pass
-			elif cloud_online == False and Raspberry_online == True:
-				restart_cloud()
-				sleep(5)
-			pass
-		# Upload to cloud after working day is over and stops before time lapse starts
-		if sync_to_cloud == False and save_to_cloud == True and new_day == False and Raspberry_online == True:
-			if cloud_online == True and new_day == False and Raspberry_online == True:
-				upload_check()
-				if time_upload > stop_time or time_upload < start_time and error_upload == True and Raspberry_online == True:
-					upload() #it's possible disconnected 
-					upload_check()
-					raspberry_online()
-					if error_upload == True and cloud_online == True and Raspberry_online == True and new_day == False:
-						print("Uploading again!")
-						upload()
-						upload_check()
-					elif error_upload == False:
-						print("Succes upload, new upload schedule tomorrow!")
-						new_day = True 
-						return new_day
-						sleep(120)
-					elif cloud_online == False:
-						restart_drive()
-						upload_check()
-						sleep(120)
-					pass
-				pass
-			pass
-		pass	
-	elif Raspberry_online == False:
-		raspberry_online() # raspberry not online
-		sleep(300)
-	pass
-	#ther is a problem, if a time lapse ends in 23:50 and the next day is a non working day 
-	#the upload will have only 10 minutes to run and it will not be completed, the upload will 
-	#coninue next working day again after 23:50, but will have two days of files to upload .
-	#to overcome this probelm the next stsment will overwrite the Shedule_day to make it work one more day
-	#this is for fail safe safety
-	elif Schedule_day == False and stop_time > 82800: #23:00
+			pass	
+		elif Raspberry_online == False:
+			raspberry_online() # raspberry not online
+			sleep(300)
+		pass
+		#ther is a problem, if a time lapse ends in 23:50 and the next day is a non working day 
+		#the upload will have only 10 minutes to run and it will not be completed, the upload will 
+		#coninue next working day again after 23:50, but will have two days of files to upload .
+		#to overcome this probelm the next stsment will overwrite the Shedule_day to make it work one more day
+		#this is for fail safe safety
+		elif Schedule_day == False and stop_time > 82800: #23:00
 		print("Not a working day, if fail will continue next working day")
 		if error_upload == True and cloud_online == True and Raspberry_online == True: 
 			print("Uploading in a non working day...")
