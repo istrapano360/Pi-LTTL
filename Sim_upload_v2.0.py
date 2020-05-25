@@ -1,5 +1,5 @@
-#gdrive upload script under construction
-#replace word gdrive with cloud
+#cloud upload script completed, not tested, latest version
+#other changes will be in v2.1
 import pytz
 import tzlocal
 import datetime
@@ -12,11 +12,12 @@ from time import sleep
 
 #TO BE DONE import from the main file "Start_timelapse.py" a variable that define witch variables will be imported
 #from specified preset 
-from MAIN Start_timelapse import Preset  #Preset = Picam-preset_1
+from Start_timelapse import Preset  #Preset = Picam-preset_1
 from Preset import start_day, stop_day, sync_to_cloud, save_to_cloud, stop_time, start_time
-#from picam_reset_1 import start_day, stop_day, sync_to_cloud, save_to_cloud, stop_time, start_time 
+
 
 #########  -  uncomment for manually run  -  #################
+#from picam_reset_1 import start_day, stop_day, sync_to_cloud, save_to_cloud, stop_time, start_time 
 #start_day = 0#only import from preset
 #stop_day = 6 #only import from preset
 #sync_to_cloud = True/False #only import from preset
@@ -24,18 +25,19 @@ from Preset import start_day, stop_day, sync_to_cloud, save_to_cloud, stop_time,
 #stop_time = "8:00" #only import from preset
 #start_time = "18:00" #only import from preset
 
-#############  -  Custom time  -  ###########################
-time_upload = "20:00"
+#############  -  Custom time  -  only for 2. option ########
+time_upload = "20:00"		#manually
+#time_upload => stop_time	#auto
 #############################################################
 
-x = datetime.datetime.utcnow()															#UTC time 
+x = datetime.datetime.utcnow()									#UTC time 
 local_timezone = tzlocal.get_localzone()							#Time Zone 
 moment_utc = x.replace(tzinfo=pytz.utc).astimezone(local_timezone) 				#UTC Time Zone
 moment =(moment_utc.strftime("%X"))								#time now in hh:mm:ss
 start_str = (sum(x * int(t) for x, t in zip([3600, 60, 1], start_time.split(":"))))		#string time start now in seconds
 stop_str = (sum(x * int(t) for x, t in zip([3600, 60, 1], stop_time.split(":"))))		#string time stop now in seconds
 tine_now_str = (sum(x * int(t) for x, t in zip([3600, 60, 1], moment.split(":"))))		#string time now in seconds
-day_now= x.strftime("%w") ##TO BE DONE add time zone, we don't want a couple of hours to change the day before or after the local time 								#day of the week 0-6
+day_now= moment_utc.strftime("%w")								#day of the week 0-6 in the time zone
 
 Schedule_day = False
 Raspberry_online = True
@@ -82,7 +84,7 @@ def upload_check():
 	if os.system(): #find a way to check the differences
 		error_upload = True 
 		return error_upload
-	else:
+	else:# all good 
 		error_upload = False
 		return error_upload
 	
@@ -116,45 +118,41 @@ def day_check():
 				global Schedule_day
 				Schedule_day = False
 				return Schedule_day
-			
-#ther is a problem, if a time lapse ends in 23:50 and the next day is a non working day 
-#the upload will have only 10 minutes to run and it will not be completed. The upload will 
-#coninue next working day again after 23:50, but will have two days files.
-#to overcome this probelm 
-#if time_now < 23:00 
-#   ignore or add a woring day for night upload
-#this is for fail safe reason
 
 #############################  - Main loop  -  ##########################
 new_day = True
 upload_complete = False
+day_check()
 while new_day == True:
 	raspberry_online()
 	restart_cloud()
 	upload()
 	day_check()
 	if Schedule_day == True
+		day_check()
 		raspberry_online()
-		if Raspberry_online == True:
-			new_day = False
-			return new_day
-			cloud_check()
+		cloud_check()
+		new_day = False
+		return new_day
+		if Raspberry_online == True and new_day == False:
+			# Sinc on cloud option right after taking a picture
 			if sync_to_cloud == True and save_to_cloud == False and new_day == False and Raspberry_online == True:
 				if cloud_online == True and new_day == False and Raspberry_online == True:
 					if time_now <= stop_time and new_day == False and Raspberry_online == True:  #working time is not over 
 						sync() #no  --checksum, faster upload, if is done before stop time just wait 2 min and resart
 						sleep(60)
-						if time_now > stop_time and new_day == False and Raspberry_online == True: 	 #working time is over no new picture will be taken
+						if time_now > stop_time and new_day == False and Raspberry_online == True:
+							#working time is over no new picture will be taken
 							cloud_check()
 							if cloud_online == True and new_day == False and Raspberry_online == True:
-								upload_check()	#vrati error, to je sigurno ako nije završio s uploadom 
+								upload_check()	
 								if error_upload == True and new_day == False and Raspberry_online == True:
 									seelp(2)
 									print("Repeating upload!")
 									upload()
 									upload_check() #if is ok - set error_upload to False
-									cloud_check()
 									raspberry_online()
+									cloud_check()
 								elif new_day == False and Raspberry_online == True:
 									seelp(2)
 									print("Upload exsecuted succesfuly, no need to repeat!")
@@ -162,7 +160,7 @@ while new_day == True:
 									return new_day
 									cloud_check()
 									raspberry_online()
-								pass	#form frst time her go back to main lool if  
+								pass	#form frst time her go back to main lool if   Schedule_day == True:
 							elif cloud_online == False and Raspberry_online == True:
 								restart_cloud()
 								sleep(5)
@@ -172,11 +170,13 @@ while new_day == True:
 				elif cloud_online == False and Raspberry_online == True:
 					restart_cloud()
 					sleep(5)
+				pass
+			# Upload to cloud after working day is over and stops before time lapse starts
 			if sync_to_cloud == False and save_to_cloud == True and new_day == False and Raspberry_online == True:
 				if cloud_online == True and new_day == False and Raspberry_online == True:
 					upload_check()
 					if time_upload > stop_time or time_upload < start_time and error_upload == True and Raspberry_online == True:
-						upload() #it's possible go offline 
+						upload() #it's possible disconnected 
 						upload_check()
 						raspberry_online()
 						if error_upload == True and cloud_online == True and Raspberry_online == True and new_day == False:
@@ -195,12 +195,26 @@ while new_day == True:
 						pass
 					pass
 				pass
-			pass
-		pass	
+			pass	
+		elif Raspberry_online == False:
+			raspberry_online() # raspberry not online
+			sleep(300)
+		pass
+	#ther is a problem, if a time lapse ends in 23:50 and the next day is a non working day 
+	#the upload will have only 10 minutes to run and it will not be completed, the upload will 
+	#coninue next working day again after 23:50, but will have two days of files to upload .
+	#to overcome this probelm the next stsment will overwrite the Shedule_day to make it work one more day
+	#this is for fail safe safety
+	elif Schedule_day == False and stop_time > 82800: #23:00
+		print("Not a working day, if fail will continue next working day")
+		if error_upload == True and cloud_online == True and Raspberry_online == True: 
+			print("Uploading in a non working day...")
+			upload()
+			upload_check()
+			raspberry_online()
+		elif error_upload == False:
+			print("Succes upload, new upload schedule next scheduled day!")
+		pass
 	else:
-		raspberry_online() # raspberry nije online
-		sleep(300)
-else: ##elif Schedule_day = False and stop_time >= 23:00 
-		#uploaad 
-		#check ando stop
-	day_check()
+		print("Upload will continue next scheduled day")
+		day_check()
