@@ -31,9 +31,9 @@ time_upload = "20:00"		#manually
 #############################################################
 
 x = datetime.datetime.utcnow()															#UTC time 
-local_timezone = tzlocal.get_localzone()												#Time Zone 
-moment_utc = x.replace(tzinfo=pytz.utc).astimezone(local_timezone) 						#UTC Time Zone
-moment =(moment_utc.strftime("%X"))														#time now in hh:mm:ss
+local_timezone = tzlocal.get_localzone()							#Time Zone 
+moment_utc = x.replace(tzinfo=pytz.utc).astimezone(local_timezone) 				#UTC Time Zone
+moment =(moment_utc.strftime("%X"))								#time now in hh:mm:ss
 start_str = (sum(x * int(t) for x, t in zip([3600, 60, 1], start_time.split(":"))))		#string time start now in seconds
 stop_str = (sum(x * int(t) for x, t in zip([3600, 60, 1], stop_time.split(":"))))		#string time stop now in seconds
 tine_now_str = (sum(x * int(t) for x, t in zip([3600, 60, 1], moment.split(":"))))		#string time now in seconds
