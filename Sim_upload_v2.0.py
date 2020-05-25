@@ -156,7 +156,7 @@ while new_day == True:
 							elif new_day == False and Raspberry_online == True:
 								seelp(2)
 								print("Upload exsecuted succesfuly, no need to repeat!")
-								new_day == True 
+								new_day = True 
 								cloud_check()
 								raspberry_online()
 							return new_day
@@ -185,7 +185,7 @@ while new_day == True:
 						upload_check()
 					elif error_upload == False:
 						print("Succes upload, new upload schedule tomorrow!")
-						new_day == True 
+						new_day = True 
 						return new_day
 						sleep(120)
 					elif cloud_online == False:
