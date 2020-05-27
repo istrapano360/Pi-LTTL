@@ -62,15 +62,16 @@ shutter = 0							#shooter speed in ms 0 = auto, s_60
 sync_to_cloud = False 						#True / False emediatly save on gdrive,
 save_to_cloud = True 						#True / False save on gdrive after stop_time
 #for disabling the script just put both in the same value, save_to_gdrive == sync_to_gdrive
-#pool = "/home/pi/myfolder/Pool/"	 #working on		#Capture folder name, differnt settings better different folders
+#Pool = "/home/pi/myfolder/Pool/"	 #working on		#Capture folder name, differnt settings better different folders
 ########################################################################################################
+camera = PiCamera()
+camera.shutter_speed = (Shutter * 1000)	#in MICROseconds
 
 camera = PiCamera()
-#filename = ("IMG_" + time.strftime("%y%m-%d_%H%M-%S") +".jpg")	#filename formating "IMG_2005-23_1203-00.jpg"	#working on
-#image_name = pool + filename											#working on
+#Filename = ("IMG_" + time.strftime("%y%m-%d_%H%M-%S") +".jpg")	#filename formating "IMG_2005-23_1203-00.jpg"	#working on
+#Image_name = Pool + Filename											#working on
 
 def camera_settings():					#Camera_settings
-	#camera = PiCamera()
 	camera.brightness = 50 				#(0 to 100)
 	camera.sharpness = 0 				#(-100 to 100)
 	camera.contrast = -10 				#(-100 to 100)
