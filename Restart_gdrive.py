@@ -2,10 +2,12 @@
 import os
 import time
 from time import sleep
-#restart gdrive
-# "gdrive" is a local folder in current directory, 
-#"rpi-gdrive" is a profile create with rclone
-#need to be first configured and used any name you want
+"""
+restart gdrive
+"gdrive" is a local folder in current directory, 
+"rpi-gdrive" is a profile create with rclone
+need to be first configured and used any name you want
+"""
 
 print("I will unmount gdrive")
 sleep(1)
