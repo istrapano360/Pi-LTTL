@@ -1,12 +1,13 @@
 # Pi-LTTL
 Long term time lapse for Raspberry Pi with HQ camera 1.0
+Python 3
 
 *under construction, Scheduler_x.py can be executed manually 
 
 There will be a master scipt to start all in the same time StartTimelapse_1.py
 
 The structure:
-
+Create_folders.py.................... run ones to create file tree
 StartTimelapse_1.py.................. edit for chosing a preset
   - Scheduler_x.py..................... don't edit
   - Picame_preset-x.py............ edit preset options
@@ -37,6 +38,8 @@ import os
 import sys
 
 import socket
+
+import shutil
 
 import subprocess 
 
