@@ -1,6 +1,6 @@
 # Pi-LTTL
 Long term time lapse for Raspberry Pi with HQ camera 1.0
-Python 3
+\n Python 3
 
 *under construction, Scheduler_x.py can be executed manually 
 
