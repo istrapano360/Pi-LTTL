@@ -8,14 +8,16 @@ Python 3
 There will be a master scipt to start all in the same time StartTimelapse_1.py
 
 The structure:
-Create_folders.py.................... run ones to create file tree
-StartTimelapse_1.py.................. edit for chosing a preset
-  - Scheduler_x.py..................... don't edit
-  - Picame_preset-x.py............ edit preset options
-  - Sim_upload_x.py...................don't edit, or only for manualy executing uncomment the presset, or set the desidered time
-  - gdrive.......................................folder cloud storage
-  - pool..........................................folder where script save the images
-  - backup....................................folder for backup, double check the cloud before deleting the files
+Create_folders.py.................... run ones to create file tree (100% Completed)
+StartTimelapse_1.py.................. edit for chosing a preset (0% Completed)
+  - Scheduler_x.py................... don't edit (100% Completed)
+  - Picame_preset-x.py............... edit preset options (90% completed)
+  - Sim_upload_x.py.................. don't edit, or only for manualy executing uncomment the presset, or set the desidered time (80% completed)
+  - Restart_gdrive.py................ (95% completed)
+  Folders:
+  - gdrive/.......................................folder mouted remote cloud storage
+  - Local/........................................folder where script save the images
+  - uploaded/.....................................folder of uploaded files movef from Local/
   
 _x are versions of the files  
 -x preset index
