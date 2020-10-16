@@ -8,6 +8,7 @@ Python 3
 There will be a master scipt to start all in the same time StartTimelapse_1.py
 
 The structure:
+
 Create_folders.py.................... run ones to create file tree (100% Completed)
 StartTimelapse_1.py.................. edit for chosing a preset (0% Completed)
   - Scheduler_x.py................... don't edit (100% Completed)
